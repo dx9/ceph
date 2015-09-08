@@ -6479,6 +6479,8 @@ int ReplicatedPG::fill_in_copy_get(
     reply_obj.flags |= object_copy_data_t::FLAG_OMAP_DIGEST;
     reply_obj.omap_digest = oi.omap_digest;
   }
+  reply_obj.truncate_seq = oi.truncate_seq;
+  reply_obj.truncate_size = oi.truncate_size;
 
   // attrs
   map<string,bufferlist>& out_attrs = reply_obj.attrs;
@@ -6702,6 +6704,8 @@ void ReplicatedPG::_copy_some(ObjectContextRef obc, CopyOpRef cop)
 	      &cop->results.source_data_digest,
 	      &cop->results.source_omap_digest,
 	      &cop->results.reqids,
+	      &cop->results.truncate_seq,
+	      &cop->results.truncate_size,
 	      &cop->rval);
   op.set_last_op_flags(cop->src_obj_fadvise_flags);
 
@@ -7192,6 +7196,8 @@ void ReplicatedPG::finish_promote(int r, CopyResults *results,
       tctx->new_obs.oi.set_data_digest(results->data_digest);
     if (results->has_omap)
       tctx->new_obs.oi.set_omap_digest(results->omap_digest);
+    tctx->new_obs.oi.truncate_seq = results->truncate_seq;
+    tctx->new_obs.oi.truncate_size = results->truncate_size;
 
     if (soid.snap != CEPH_NOSNAP) {
       tctx->new_obs.oi.snaps = results->snaps;
