@@ -30,6 +30,10 @@ core
 *.log
 /src/testdir
 
+# alpine abuild things
+.abuild/
+alpine/APKBUILD
+
 # specific local dir files
 /build-doc
 /tags

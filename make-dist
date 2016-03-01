@@ -52,6 +52,9 @@ cat ceph.spec.in | \
     sed "s/@VERSION@/$rpm_version/g" | \
     sed "s/@RPM_RELEASE@/$rpm_release/g" |
     sed "s/@TARBALL_BASENAME@/ceph-$version/g" > ceph.spec
+cat alpine/APKBUILD.in | \
+    sed "s/@VERSION@/$rpm_version/g" | \
+    sed "s/@RELEASE@/$rpm_release/g" > alpine/APKBUILD
 ln -s . $outfile
 tar cvf $outfile.version.tar $outfile/src/.git_version $outfile/src/ceph_ver.h $outfile/ceph.spec
 tar --concatenate -f $outfile.both.tar $outfile.version.tar
